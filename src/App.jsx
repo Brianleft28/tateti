@@ -15,15 +15,26 @@ function App() {
   }
 )
     
-  const [turn, setTurn] = useState(TURNS.X)
+  const [turn, setTurn] = useState(() => {
+      const turnFromStorage = window.localStorage.getItem('turn') 
+      return turnFromStorage ?? TURNS.X
+    } 
+  )
+    
 
   // null es que no hay ganador, false es empate
   const [winner, setWinner] = useState(null)
   
+  // reseteando el juego el juego
   const resetGame = () => {
     setBoard(Array(9).fill(null))
     setTurn(TURNS.X)
     setWinner(null)
+
+    window.localStorage.removeItem('board')
+    window.localStorage.removeItem('turn')
+
+
   }
 
   const checkEndGame = (newBoard) => {
@@ -42,6 +53,7 @@ function App() {
       const newTurn = turn === TURNS.X ?  TURNS.O : TURNS.X
       setTurn(newTurn)
     // guardar partida, el estado del tablero
+
     window.localStorage.setItem('board', JSON.stringify(newBoard))
     window.localStorage.setItem('turn', newTurn)
 
