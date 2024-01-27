@@ -15,3 +15,8 @@ export const checkWinnerFrom = (boardToCheck) => {
   }
   return null;
 };
+
+// chequear si todos los tableros estan ocupados y no hay ganador
+export const checkEndGame = (newBoard) => {
+  return newBoard.every((square) => square != null)
+}

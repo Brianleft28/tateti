@@ -3,12 +3,13 @@ import confetti from "canvas-confetti"
 import { useState } from 'react';
 import { Square } from "./components/Square";
 import { TURNS, WINNER_COMBOS } from "./constants";
-import { checkWinnerFrom } from "./logic/board";
+import { checkWinnerFrom, checkEndGame } from "./logic/board";
 import { WinnerModal } from "./components/WinnerModal";
+import { saveGameStorage, resetGameStorage } from "./logic/storage";
+
 
 
 function App() {
-  console.log('render')
   const [board, setBoard] = useState(()=> {
     console.log('inicializar estado del board')
     const boardFromStorage = window.localStorage.getItem('board')
@@ -32,20 +33,14 @@ function App() {
     setTurn(TURNS.X)
     setWinner(null)
 
-    window.localStorage.removeItem('board')
-    window.localStorage.removeItem('turn')
-
-
+    resetGameStorage()
   }
 
-  const checkEndGame = (newBoard) => {
-    return newBoard.every((square) => square != null)
-  }
 
   const updateBoard = (index) => {
     // no actualizamos esta posicion
     // si ya tiene algo
-      if(board[index] || winner) return (console.log('hasta aca papi'))
+      if(board[index] || winner) return 
     // actualizar el tablero
       const newBoard = [...board] 
       newBoard[index] = turn // x u o
@@ -55,8 +50,10 @@ function App() {
       setTurn(newTurn)
     // guardar partida, el estado del tablero
 
-    window.localStorage.setItem('board', JSON.stringify(newBoard))
-    window.localStorage.setItem('turn', newTurn)
+      saveGameStorage({
+        board: newBoard,
+        turn: newTurn
+      })
 
 
     // chequear si hay un ganador 
