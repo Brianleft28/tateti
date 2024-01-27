@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Square } from "./components/Square";
 import { TURNS, WINNER_COMBOS } from "./constants";
 import { checkWinnerFrom } from "./logic/board";
+import { WinnerModal } from "./components/WinnerModal";
 
 
 function App() {
@@ -100,28 +101,13 @@ return (
         </Square>
       </section>
      
-      {
-      winner != null && (
-        <section className='winner'>
-          <div className='text'>
-            <h2>
-              {
-                winner === false 
-                ? 'Empate' 
-                : `Ganó ${winner}`
-              }
-            </h2>
-            <header className='win'>
-              {winner && <Square>{winner}</Square>}
-            </header>    
-            <footer>
-              <button onClick={resetGame}>Empezar de nuevo</button>
-            </footer>
-          </div>
-        </section>
-      )
-      
-    }
+  
+        <WinnerModal
+        winner={winner}
+        resetGame={resetGame}
+        />
+
+    
     </main>
     
 
